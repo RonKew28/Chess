@@ -21,9 +21,10 @@ class Board
     @rows[row][col] = piece
   end
 
+
   def valid_pos?(pos)
     row, col = pos
-    row.between?(0, 7) && col.between(0,7)
+    row.between?(0, 7) && col.between?(0,7)
   end
 
   def empty?
@@ -47,11 +48,17 @@ class Board
   private
   attr_reader :empty_square
   def fill_front_row(color, row_num)
-    8.times { |col_num| Pawn.new(color, self, [row_num, col_num]) }
+    front_piece_classes = [Pawn, Pawn, Pawn, Pawn, Pawn, Pawn, Pawn, Pawn]
+    front_pieces = []
+    front_piece_classes.each_with_index do |front_piece, col_num|
+      front_pieces << front_piece.new(color, self, [row_num, col_num])
+    end
+    front_pieces
+    # 8.times { |col_num| Pawn.new(color, self, [row_num, col_num]) }s
   end
 
   def fill_back_row(color, row_num)
-    back_pieces = [
+    back_piece_classes = [
                   Rook,
                   Knight,
                   Bishop,
@@ -61,10 +68,11 @@ class Board
                   Knight,
                   Rook
                   ]
-
-    back_pieces.each_with_index do |back_piece, col_num|
-      back_piece.new(color, self, [row_num,j])
+    back_pieces = []
+    back_piece_classes.each_with_index do |back_piece, col_num|
+      back_pieces << back_piece.new(color, self, [row_num, col_num])
     end
+    back_pieces
   end
 
   def create_starting_board
