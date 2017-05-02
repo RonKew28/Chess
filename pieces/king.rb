@@ -1,5 +1,5 @@
 require_relative 'piece'
-require 'stepable'
+require_relative 'moveable/stepable'
 
 class King < Piece
   include Stepable
@@ -23,5 +23,5 @@ class King < Piece
   def move_diffs
     KING_MOVE_DIRS
   end
-  
+
 end

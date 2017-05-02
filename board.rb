@@ -27,7 +27,7 @@ class Board
     row.between?(0, 7) && col.between?(0,7)
   end
 
-  def empty?
+  def empty?(pos)
     self[pos].nil?
   end
 
