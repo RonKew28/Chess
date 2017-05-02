@@ -4,12 +4,12 @@ class Board
   attr_reader :rows, :empty_square
 
   def self.opp_color(own_color)
-    color == :white ? :black : :white
+    own_color == :white ? :black : :white
   end
 
-  def initialize
+  def initialize(fill_board = true)
     @empty_square = NullPiece.instance
-    create_starting_board
+    create_starting_board(fill_board)
   end
 
   def [](pos)
@@ -36,7 +36,7 @@ class Board
   end
 
   def in_check?(own_color)
-    opp_pieces = pieces(Board.opp_color(own_color))
+    opp_pieces = single_color_pieces(Board.opp_color(own_color))
     opp_moves = []
     opp_pieces.each do |piece|
       opp_moves += piece.moves
@@ -48,7 +48,7 @@ class Board
   def checkmate?(color)
     return false unless in_check?(color)
 
-    pieces.select { |p| p.color == color }.all? do |piece|
+    all_pieces.select { |p| p.color == color }.all? do |piece|
       piece.valid_moves.empty?
     end
   end
@@ -83,17 +83,17 @@ class Board
     raise 'piece cannot move like that' unless piece.moves.include?(end_pos)
 
     self[end_pos] = piece
-    self[start_pos] = nil
+    self[start_pos] = empty_square
     piece.pos = end_pos
   end
 
   def add_piece(piece, pos)
-    raise 'position not empty' unless empty?(pos)
+    raise "position not empty #{pos} #{piece}" unless empty?(pos)
     self[pos] = piece
   end
 
   def dup
-    dupped_board = Board.new
+    dupped_board = Board.new(false)
 
     all_pieces.each do |piece|
       piece.class.new(piece.color, dupped_board, piece.pos)
@@ -132,8 +132,9 @@ class Board
     back_pieces
   end
 
-  def create_starting_board
+  def create_starting_board(fill_board)
     @rows = Array.new(8) { Array.new(8, empty_square) }
+    return unless fill_board
     @rows[0] = fill_back_row(:black, 0)
     @rows[1] = fill_front_row(:black, 1)
     @rows[6] = fill_front_row(:white, 6)

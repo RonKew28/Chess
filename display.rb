@@ -18,6 +18,18 @@ class Display
   end
 end
 
+def reset!
+  @notifications.delete(:error) if !@notifications.nil?
+end
+
+def uncheck!
+  @notifications.delete(:check) if !@notifications.nil?
+end
+
+def set_check!
+  @notifications[:check] = "Check!" if !@notifications.nil?
+end
+
 def build_row(row, i)
   j = 0
   this_line = row.inject("") do |line, piece|
@@ -28,15 +40,16 @@ def build_row(row, i)
   return this_line
 end
 
+
   def build_square(pos, piece)
     if pos == cursor.cursor_pos && cursor.selected
       background = :light_green
     elsif pos == cursor.cursor_pos
       background = :light_red
     elsif (pos[0] + pos[1]).odd?
-      background = :light_blue
+      background = :cyan
     else
-      background = :light_yellow
+      background = :blue
     end
     stringified_piece = piece ? piece.to_s : "   "
     square = " #{stringified_piece} ".colorize(background: background)
@@ -47,17 +60,11 @@ end
     system("clear")
     puts "Make your move"
     puts build_grid
-  end
 
-  def test
-
-    while true
-      self.render
-      new_pos = cursor.get_input
+    unless @notifications.nil?
+      @notifications.each do |key, val|
+        puts "#{val}"
+      end
     end
   end
 end
-
-
-board = Board.new
-p Display.new(board).test
