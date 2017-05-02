@@ -7,6 +7,8 @@ class Piece
 
   def move(new_pos)
     return false unless valid_pos?(new_pos) && valid_move?(new_pos)
+    @pos = new_pos
+    @board.move(Move.new(@pos, new_pos, self))
   end
 
   def valid_move?(new_pos)
