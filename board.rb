@@ -30,12 +30,16 @@ class Board
     self[pos].nil?
   end
 
-  def move_piece
+  def make_move(move)
+    piece_to_move = move.piece
+    start_pos = self[*move.start_pos]
+    end_pos = self[*move.end_pos]
+
     raise 'there is no piece at the start position' if empty?(start_pos)
-
-    piece_to_move = self[start_pos]
-
     raise 'Invalid move for selected piece' unless piece.moves.include?(end_pos)
+
+    start_pos = nil
+    end_pos = piece_to_move
 
 
   end
