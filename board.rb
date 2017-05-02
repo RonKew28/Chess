@@ -4,7 +4,7 @@ class Board
   attr_reader :rows
 
   def initialize
-    @empty_square = NullPiece.instance
+    @rows = Array.new(8) { Array.new(8) { nil } }
     create_starting_board
   end
 
@@ -22,11 +22,12 @@ class Board
   end
 
   def valid_pos?(pos)
-    pos.all? { |coord| coord.between?(0,7) }
+    row, col = pos
+    row.between?(0, 7) && col.between(0,7)
   end
 
   def empty?
-    self[pos].empty?
+    self[pos].nil?
   end
 
   def move_piece
@@ -34,19 +35,18 @@ class Board
 
     piece_to_move = self[start_pos]
 
-    raise 'Invalid move for selected piece' unlesss piece.moves.include?(end_pos)
+    raise 'Invalid move for selected piece' unless piece.moves.include?(end_pos)
 
 
   end
 
   private
   attr_reader :empty_square
-  def fill_front_row(color)
-    row = (color == :white) ? 6 : 1
-    8.times { |col| Pawn.new(color, self, [row, col]) }
+  def fill_front_row(color, row_num)
+    8.times { |col_num| Pawn.new(color, self, [row_num, col_num]) }
   end
 
-  def fill_back_row(color)
+  def fill_back_row(color, row_num)
     back_pieces = [
                   Rook,
                   Knight,
@@ -58,18 +58,16 @@ class Board
                   Rook
                   ]
 
-    row = (color == :white) ? 7 : 0
-    back_pieces.each_with_index do |back_piece, col|
-      back_piece.new(color, self, [i,j])
+    back_pieces.each_with_index do |back_piece, col_num|
+      back_piece.new(color, self, [row_num,j])
     end
   end
 
   def create_starting_board
-    @rows = Array.new(8) { Array.new(8, empty_square) }
-    [:white, :black].each do |color|
-      fill_back_row(color)
-      fill_front_row(color)
-    end
+    @rows[0] = fill_back_row(:black, 0)
+    @rows[1] = fill_front_row(:black, 1)
+    @rows[6] = fill_front_row(:white, 6)
+    @rows[7] = fill_back_row(:white, 7)
   end
 
 end
