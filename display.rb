@@ -48,4 +48,16 @@ end
     puts "Make your move"
     puts build_grid
   end
+
+  def test
+
+    while true
+      self.render
+      new_pos = cursor.get_input
+    end
+  end
 end
+
+
+board = Board.new
+p Display.new(board).test

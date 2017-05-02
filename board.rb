@@ -1,10 +1,14 @@
 require_relative 'pieces'
 
 class Board
-  attr_reader :rows
+  attr_reader :rows, :empty_square
+
+  def self.opp_color(own_color)
+    color == :white ? :black : :white
+  end
 
   def initialize
-    @rows = Array.new(8) { Array.new(8) { nil } }
+    @empty_square = NullPiece.instance
     create_starting_board
   end
 
@@ -28,21 +32,74 @@ class Board
   end
 
   def empty?(pos)
-    self[pos].nil?
+    self[pos].empty?
   end
 
-  def make_move(move)
-    piece_to_move = move.piece
-    start_pos = self[*move.start_pos]
-    end_pos = self[*move.end_pos]
+  def in_check?(own_color)
+    opp_pieces = pieces(Board.opp_color(own_color))
+    opp_moves = []
+    opp_pieces.each do |piece|
+      opp_moves += piece.moves
+    end
 
+    opp_moves.include?(find_king(own_color).pos)
+  end
+
+  def checkmate?(color)
+    return false unless in_check?(color)
+
+    pieces.select { |p| p.color == color }.all? do |piece|
+      piece.valid_moves.empty?
+    end
+  end
+
+  def all_pieces
+    @rows.flatten.reject { |piece| piece.empty? }
+  end
+
+  def single_color_pieces(color)
+    all_pieces.select { |piece| piece.color == color }
+  end
+
+  def find_king(color)
+    single_color_pieces(color).find { |piece| piece.is_a?(King) }
+  end
+
+  def move_piece(turn_color, start_pos, end_pos)
     raise 'there is no piece at the start position' if empty?(start_pos)
+
+    piece = self[start_pos]
+
+    raise 'You can only move your own pieces' if piece.color != turn_color
     raise 'Invalid move for selected piece' unless piece.moves.include?(end_pos)
+    raise 'You cannot move into check' unless piece.valid_moves.include?(end_pos)
 
-    start_pos = nil
-    end_pos = piece_to_move
+    move_piece!(start_pos, end_pos)
+  end
 
+  # moves without performing checks
+  def move_piece!(start_pos, end_pos)
+    piece = self[start_pos]
+    raise 'piece cannot move like that' unless piece.moves.include?(end_pos)
 
+    self[end_pos] = piece
+    self[start_pos] = nil
+    piece.pos = end_pos
+  end
+
+  def add_piece(piece, pos)
+    raise 'position not empty' unless empty?(pos)
+    self[pos] = piece
+  end
+
+  def dup
+    dupped_board = Board.new
+
+    all_pieces.each do |piece|
+      piece.class.new(piece.color, dupped_board, piece.pos)
+    end
+
+    dupped_board
   end
 
   private
@@ -76,6 +133,7 @@ class Board
   end
 
   def create_starting_board
+    @rows = Array.new(8) { Array.new(8, empty_square) }
     @rows[0] = fill_back_row(:black, 0)
     @rows[1] = fill_front_row(:black, 1)
     @rows[6] = fill_front_row(:white, 6)

@@ -2,22 +2,16 @@ class Piece
   attr_accessor :board, :color, :pos
 
   def initialize(color, board, pos)
+    raise 'invalid color' unless [:white, :black].include?(color)
+    raise 'invalid pos' unless board.valid_pos?(pos)
+
     @color, @board, @pos = color, board, pos
+
+    board.add_piece(self, pos)
   end
 
-  def move(new_pos)
-    return false unless valid_pos?(new_pos) && valid_move?(new_pos)
-    @pos = new_pos
-    @board.move(Move.new(@pos, new_pos, self))
-  end
-
-  def valid_move?(new_pos)
-    moves.include?(new_pos)
-  end
-
-  def valid_pos?(new_pos)
-    row, col = new_pos
-    row.between?(0, 7) && col.between(0,7)
+  def empty?
+    self.is_a?(NullPiece) ? true : false
   end
 
   def to_s
@@ -26,5 +20,16 @@ class Piece
 
   def symbol
 
+  end
+
+  def valid_moves
+    moves.reject { |end_pos| move_into_check?(end_pos) }
+  end
+
+  private
+  def move_into_check?(end_pos)
+    test_board = board.dup
+    test_board.make_move(pos, end_pos)
+    test_board.in_check?(color)
   end
 end
