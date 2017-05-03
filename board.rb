@@ -32,7 +32,7 @@ class Board
   end
 
   def empty?(pos)
-    self[pos].empty?  
+    self[pos].empty?
   end
 
   def in_check?(own_color)
@@ -115,7 +115,6 @@ class Board
       front_pieces << front_piece.new(color, self, [row_num, col_num])
     end
     front_pieces
-    # 8.times { |col_num| Pawn.new(color, self, [row_num, col_num]) }s
   end
 
   def fill_back_row(color, row_num)
