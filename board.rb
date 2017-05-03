@@ -36,13 +36,17 @@ class Board
   end
 
   def in_check?(own_color)
+    opp_moves = opponent_valid_moves(own_color)
+    opp_moves.include?(find_king(own_color).pos)
+  end
+
+  def opponent_valid_moves(own_color)
     opp_pieces = single_color_pieces(Board.opp_color(own_color))
     opp_moves = []
     opp_pieces.each do |piece|
       opp_moves += piece.moves
     end
-
-    opp_moves.include?(find_king(own_color).pos)
+    opp_moves
   end
 
   def checkmate?(color)
