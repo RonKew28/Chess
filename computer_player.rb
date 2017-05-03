@@ -12,7 +12,7 @@ class ComputerPlayer < Player
     Queen => 9,
     King => 1
   }
-
+  
   def initialize(color, display)
     @color = color
     @display = display

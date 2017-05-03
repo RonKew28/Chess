@@ -14,7 +14,7 @@ class Display
 
   def build_grid
   @board.rows.map.with_index do |row, i|
-    build_row(row, i)
+    "#{i}  " + build_row(row, i)
   end
 end
 
@@ -32,12 +32,12 @@ end
 
 def build_row(row, i)
   j = 0
-  this_line = row.inject("") do |line, piece|
+  current_row = row.inject("") do |line, piece|
     pos = [i, j]
     j += 1
     line + build_square(pos, piece)
   end
-  return this_line
+  return current_row
 end
 
 
@@ -59,6 +59,7 @@ end
   def render
     system("clear")
     puts "Make your move"
+    puts "     A    B    C    D    E    F    G    H"
     puts build_grid
 
     unless @notifications.nil?
