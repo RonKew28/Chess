@@ -42,6 +42,13 @@ def make_smarter_move(board)
       all_moves << current_move
     end
   end
+
+  move_to_make = all_moves.shuffle.max_by(&:value)
+  board.move_piece(self.color, move_to_make.start_pos, move_to_make.end_pos)
+  puts "#{move_to_make.reasons}" unless move_to_make.reasons.empty?
+  sleep(1)
+  
+end
 ```
 
 ## Future Directions
