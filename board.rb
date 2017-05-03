@@ -32,7 +32,7 @@ class Board
   end
 
   def empty?(pos)
-    self[pos].empty?
+    self[pos].empty?  
   end
 
   def in_check?(own_color)
