@@ -19,14 +19,9 @@ class ComputerPlayer < Player
   end
 
   def make_comp_move(board)
-    # begin
       piece_to_move = board.single_color_pieces(self.color).sample
       next_move = piece_to_move.valid_moves.sample
       board.move_piece(self.color, piece_to_move.pos, next_move)
-    # rescue StandardError => e
-    #   @display.notifications[:error] = e.message unless @display.notifications.nil?
-    #   retry
-    # end
   end
 
   def make_smarter_move(board)
