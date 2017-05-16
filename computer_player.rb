@@ -35,20 +35,22 @@ class ComputerPlayer < Player
         current_move = Move.new(piece.pos, potential_move, piece)
         if could_be_captured?(board, current_move.start_pos)
           priority_move = true
-          current_move.reasons << ["piece could be captured at start pos"]
+          current_move.reasons << ["#{self.color.capitalize}'s #{current_move.piece.class} could be captured at #{piece.pos}  +#{PIECE_VALUES[piece.class]}"]
         end
 
         simulated_board = board.dup
 
         if !simulated_board.empty?(current_move.end_pos)
-          current_move.value += PIECE_VALUES[simulated_board[current_move.end_pos].class]
-          current_move.reasons << ["piece can capture opponents piece!"]
+          opp_piece = simulated_board[current_move.end_pos].class
+          current_move.value += PIECE_VALUES[opp_piece]
+          opponent = self.color === :black ? :white : :black
+          current_move.reasons << ["#{self.color.capitalize}'s #{current_move.piece.class} can capture #{opponent.capitalize}'s #{opp_piece}!  +#{PIECE_VALUES[opp_piece]}"]
         end
 
         simulated_board.move_piece!(current_move.start_pos, current_move.end_pos)
 
         if could_be_captured?(simulated_board, current_move.end_pos)
-          current_move.reasons << ["piece could be captured at end pos"]
+          current_move.reasons << ["If #{self.color.capitalize} moved to #{current_move.end_pos} #{self.color.capitalize}'s #{current_move.piece.class} could be captured  -#{PIECE_VALUES[piece.class]}"]
           current_move.value -= PIECE_VALUES[current_move.piece.class]
         end
 
@@ -59,10 +61,25 @@ class ComputerPlayer < Player
         all_moves << current_move
       end
     end
+
     move_to_make = all_moves.shuffle.max_by(&:value)
     board.move_piece(self.color, move_to_make.start_pos, move_to_make.end_pos)
-    puts "#{move_to_make.reasons}" unless move_to_make.reasons.empty?
-    sleep(1)
+
+    all_reasons = "COMPUTER (#{self.color.capitalize})'s reasons for making move:\n"
+
+    if move_to_make.reasons.empty?
+      all_reasons += "RANDOM MOVE\n"
+    else
+      move_to_make.reasons.each_with_index do |reason, idx|
+        all_reasons+= "#{idx+1}. #{reason[0]}\n"
+      end
+    end
+
+    all_reasons += "COMPUTER (#{self.color.capitalize})'s MOVE'S TOTAL VALUE = #{move_to_make.value}"
+
+    puts all_reasons
+    sleep(5)
+
   end
 
   def could_be_captured?(board, pos)
