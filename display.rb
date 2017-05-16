@@ -9,12 +9,13 @@ class Display
   def initialize(board)
     @board = board
     @cursor = Cursor.new([0,0], board)
-    @notifcations = {}
+    @notifications = {}
+    @reasons
   end
 
   def build_grid
   @board.rows.map.with_index do |row, i|
-    "#{i}  " + build_row(row, i)
+    "#{i+1}  " + build_row(row, i)
   end
 end
 
@@ -58,14 +59,12 @@ end
 
   def render
     system("clear")
-    puts "Make your move"
+    puts "Use the arrow keys, WASD, or vim to move. Press space or enter to confirm move."
     puts "     A    B    C    D    E    F    G    H"
     puts build_grid
 
-    unless @notifications.nil?
-      @notifications.each do |key, val|
-        puts "#{val}"
-      end
+    @notifications.each do |key, val|
+      puts "#{val}"
     end
   end
 end

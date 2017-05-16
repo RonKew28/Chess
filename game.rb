@@ -1,3 +1,5 @@
+require 'io/console'
+
 require_relative 'board'
 require_relative 'human_player'
 require_relative 'computer_player'
@@ -20,6 +22,8 @@ class Game
       begin
         if current_player == :black
           players[current_player].make_smarter_move(board)
+
+          ask_player_to_continue
         else
           start_pos, end_pos = players[current_player].make_move(board)
           board.move_piece(current_player, start_pos, end_pos)
@@ -29,13 +33,13 @@ class Game
         notify_players
 
       rescue StandardError => e
-        @display.notifications[:error] = e.message unless @display.notifications.nil?
+        @display.notifications[:error] = e.message
         retry
       end
     end
 
     display.render
-    puts "#{current_player} is checkmated."
+    puts "#{current_player.capitalize} is checkmated."
 
     nil
   end
@@ -48,6 +52,11 @@ class Game
     else
       display.uncheck!
     end
+  end
+
+  def ask_player_to_continue
+    puts "Press any key to continue"
+    STDIN.getch
   end
 
   def swap_turn!
