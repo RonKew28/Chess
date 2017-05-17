@@ -20,15 +20,15 @@ class Display
 end
 
 def reset!
-  @notifications.delete(:error) if !@notifications.nil?
+  @notifications.delete(:error)
 end
 
 def uncheck!
-  @notifications.delete(:check) if !@notifications.nil?
+  @notifications.delete(:check)
 end
 
 def set_check!
-  @notifications[:check] = "Check!" if !@notifications.nil?
+  @notifications[:check] = "Check!"
 end
 
 def build_row(row, i)

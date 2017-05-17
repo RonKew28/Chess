@@ -14,6 +14,10 @@ class Piece
     self.is_a?(NullPiece) ? true : false
   end
 
+  def name
+    self.class
+  end
+
   def to_s
     " #{symbol} "
   end

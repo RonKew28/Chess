@@ -8,4 +8,5 @@ class Move
     @value = 0
     @reasons = []
   end
+
 end
