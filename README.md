@@ -4,7 +4,7 @@ Play chess against a custom-built Computer AI.
 
 ## Computer AI Logic
 
-[./chess_AI_demo.gif]
+![ChessAIDemo](chess_AI_demo.gif)
 
 The Computer AI implements a basic set of rules when determining its next move. It looks at each of its possible moves, assigns a value (# of points) to each of these moves, and then chooses the move with the highest value. Each type of piece is given a specific value, with Queens having the highest value and pawns having the lowest value. A separate Move class is used to keep track of the start position, end position, and piece of each of the potential moves. The move class also has an array to hold reasons for implementing the move, which are shown on the screen if that move is selected by the AI.  The AI factors in if any of its pieces are at risk, if it can kill any of its opponents pieces, and if it can put its opponent in check. Below is a code snippet that shows some of the logic the AI uses to determine its next move:
 
