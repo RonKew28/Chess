@@ -1,6 +1,26 @@
 # Chess
 
-Play chess against a custom-built Computer AI.
+Play chess against a custom-built Computer AI. This implementation uses Ruby and can be played in the console.
+
+## Instructions
+
+1. Install ruby if you do not already have it.
+2. Download the [zip file](https://github.com/RonKew28/Chess/archive/master.zip)
+3. Unzip the zip file. In the terminal, navigate to the Chess-master directory.
+4. Type 'bundle install' in the console.
+5. Type 'ruby game.rb' to start the game!
+
+## How To Play
+
+Learn more about the rules of Chess [here](https://en.wikipedia.org/wiki/Chess).
+
+1. You (the human player) are white, and the computer is black.
+2. Using the arrow keys, WASD, or vim, move to the piece you want to select and hit enter.
+3. Once you have selected a piece, use the cursor to go to the position you want to move to and press enter.
+4. If you did not make a valid move, you will be asked to try again. Otherwise, the AI will make its move.
+5. The game is over when one color is put in checkmate.
+6. Note: Currently, casting, en passant, and pawn promotion are not supported.
+
 
 ## Computer AI Logic
 
