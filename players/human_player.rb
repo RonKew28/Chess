@@ -1,5 +1,5 @@
-require_relative 'display'
 require_relative 'player'
+require './gameplay/display'
 
 class HumanPlayer < Player
 

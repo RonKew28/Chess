@@ -1,4 +1,4 @@
-require_relative 'pieces'
+require './pieces/pieces'
 
 class Board
   attr_reader :rows, :empty_square

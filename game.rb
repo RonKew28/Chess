@@ -1,8 +1,8 @@
 require 'io/console'
 
-require_relative 'board'
-require_relative 'human_player'
-require_relative 'computer_player'
+require_relative 'gameplay/board'
+require_relative 'players/human_player'
+require_relative 'players/computer_player'
 
 class Game
   attr_reader :board, :display, :current_player, :players

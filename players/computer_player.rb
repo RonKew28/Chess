@@ -1,6 +1,6 @@
-require_relative 'display'
 require_relative 'player'
-require_relative 'move'
+require './gameplay/display'
+require './gameplay/move'
 
 class ComputerPlayer < Player
 
