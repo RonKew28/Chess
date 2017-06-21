@@ -19,7 +19,7 @@ Learn more about the rules of Chess [here](https://en.wikipedia.org/wiki/Chess).
 3. Once you have selected a piece, use the cursor to go to the position you want to move to and press enter.
 4. If you did not make a valid move, you will be asked to try again. Otherwise, the AI will make its move.
 5. The game is over when one color is put in checkmate.
-6. Note: Currently, casting, en passant, and pawn promotion are not supported.
+6. Note: Currently, castling, en passant, and pawn promotion are not supported.
 
 
 ## Computer AI Logic
